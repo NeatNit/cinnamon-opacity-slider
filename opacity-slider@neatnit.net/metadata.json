@@ -1,0 +1,7 @@
+{
+    "name": "Opacity Slider",
+    "description": "Change a window's opacity from the right-click menu.",
+    "uuid": "opacity-slider@neatnit.net",
+    "author": "NeatNit",
+    "cinnamon-version": ["5.6"]
+}
