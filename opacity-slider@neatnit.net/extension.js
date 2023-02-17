@@ -1,7 +1,6 @@
-"use strict";
-
 const PopupMenu = imports.ui.popupMenu;
 const WindowMenu = imports.ui.windowMenu;
+const St = imports.gi.St;
 
 let isEnabled = false, isInstalled = false;
 let base_buildMenu, my_buildMenu;
@@ -63,7 +62,7 @@ function install() {
         // If we're enabled, create our extra slider 
         if (isEnabled) {
             // Add separator
-            // The position this.numMenuItems-2 adds the item before the last item (Close)
+            // The position this.numMenuItems-2 adds the item before the last item ("Close")
             this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem(), this.numMenuItems - 2);
             
             // Add label
@@ -77,10 +76,10 @@ function install() {
             
             // Use current opacity to set label text
             const initial_opacity = window.get_opacity();
-            updateLabel(initial_opacity)
+            updateLabel(initial_opacity);
             
             // Create the slider
-            addSlider.call(this, this, sliderValueFromOpacity(initial_opacity), (sl, value) => {                
+            let slider = addSlider.call(this, this, sliderValueFromOpacity(initial_opacity), (sl, value) => {                
                 // convert the value range (0 to 1) to an acceptable opacity
                 
                 const opacity = opacityFromSliderValue(value);
@@ -89,12 +88,18 @@ function install() {
                 
                 updateLabel(opacity);
             } );
+            
+            
+            // For both new menu entries, add empty ornament
+            // TODO: add icon too. See MnemonicLeftOrnamentedMenuItem._init in windowMenu.js
+            label.addActor(new St.Bin(), {position: 0});
+            slider.addActor(new St.Bin(), {position: 0});            
         }
         
-        return retval
+        return retval;
     }
     
-    log("overriding WindowMenu.prototype._buildMenu")
+    log("overriding WindowMenu.prototype._buildMenu");
     WindowMenu.WindowMenu.prototype._buildMenu = my_buildMenu;
     isInstalled = true;
 }
